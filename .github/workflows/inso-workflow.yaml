@@ -11,9 +11,15 @@ jobs:
   inso-lint:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - run: npm install --global insomnia-inso
+      - run: inso --version
       - name: Lint OpenAPI specification
         run: inso lint spec ${{ inputs.OPEN_API_SPEC }}
   inso-generate-config:
+    needs: [inso-lint]
     runs-on: ubuntu-latest
     steps:
       - name: Generate decK config
