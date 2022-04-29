@@ -1,0 +1,38 @@
+name: Kong configuration workflow template
+
+on:
+  workflow_call:
+    inputs:
+      KONG_HOST:
+        required: true
+        type: string
+    secrets:
+      KONG_SECRET:
+        required: true
+
+jobs:
+  deck-validate:
+    runs-on: self-hosted
+    steps:
+      - name: "deck version"
+        run: deck version
+      - name: "deck ping"
+        run: deck ping --kong-addr ${{ inputs.KONG_HOST }} --headers ${{ secrets.KONG_SECRET}}
+      - name: "deck validate"
+        run: deck validate -o kong.yaml
+  deck-diff:
+    runs-on: self-hosted
+    steps:
+      - name: "deck diff"
+        run: deck diff
+  deck-sync:
+    runs-on: self-hosted
+    steps:
+      - name: "deck sync"
+        run: deck sync
+    if:
+      contains('
+      refs/heads/dev
+      refs/heads/staging
+      refs/heads/prod
+      ', github.ref)
