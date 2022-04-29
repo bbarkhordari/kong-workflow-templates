@@ -9,12 +9,12 @@ on:
 
 jobs:
   inso-lint:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Lint OpenAPI specification
         run: inso lint spec ${{ inputs.OPEN_API_SPEC }}
   inso-generate-config:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Generate decK config
         run: inso generate config ${{ inputs.OPEN_API_SPEC }} -t declarative
